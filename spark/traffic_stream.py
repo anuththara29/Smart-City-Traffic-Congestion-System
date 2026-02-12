@@ -31,7 +31,7 @@ alert_query = alerts.writeStream \
     .outputMode("append") \
     .start()
 
-# Window aggregation (Congestion Index)
+# Window aggregation
 windowed = json_df \
     .withWatermark("event_time", "1 minute") \
     .groupBy(
@@ -49,6 +49,7 @@ storage_query = windowed.writeStream \
     .format("parquet") \
     .option("path", "data/traffic_parquet") \
     .option("checkpointLocation", "data/checkpoint") \
+    .trigger(processingTime="30 seconds") \
     .start()
 
 spark.streams.awaitAnyTermination()

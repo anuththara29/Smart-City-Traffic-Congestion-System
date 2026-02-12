@@ -14,35 +14,55 @@ def generate_report():
     # Load parquet produced by Spark
     df = pd.read_parquet(path)
 
+    if df.empty:
+        print("No data found.")
+        return
+
     print("Loaded columns:", df.columns)
 
-    # Extract start time from window struct
+    # Extract window start
     df["window_start"] = df["window"].apply(
         lambda x: x["start"] if isinstance(x, dict) else None
     )
 
-    # Convert nanoseconds to datetime
     df["window_start"] = pd.to_datetime(df["window_start"], unit="ns")
-
     df["hour"] = df["window_start"].dt.hour
 
-    # Aggregate
-    summary = (
+    # Traffic per sensor per hour
+    sensor_hourly = (
         df.groupby(["sensor_id", "hour"])["total_vehicles"]
         .sum()
         .reset_index()
     )
 
-    # Find peak hour per sensor
-    peak = summary.loc[
-        summary.groupby("sensor_id")["total_vehicles"].idxmax()
+    sensor_hourly.to_csv(
+        f"{out}/traffic_per_sensor_per_hour.csv",
+        index=False
+    )
+
+    # Overall traffic per hour 
+    hourly_total = (
+        df.groupby("hour")["total_vehicles"]
+        .sum()
+        .reset_index()
+    )
+
+    hourly_total.to_csv(
+        f"{out}/traffic_volume_vs_time.csv",
+        index=False
+    )
+
+    # Peak hour per sensor
+    peak = sensor_hourly.loc[
+        sensor_hourly.groupby("sensor_id")["total_vehicles"].idxmax()
     ]
 
-    # Save report
-    output_file = f"{out}/daily_traffic_report.csv"
-    peak.to_csv(output_file, index=False)
+    peak.to_csv(
+        f"{out}/peak_hour_per_sensor.csv",
+        index=False
+    )
 
-    print("Report saved:", output_file)
+    print("Reports generated successfully.")
 
 
 with DAG(
