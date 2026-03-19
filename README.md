@@ -26,17 +26,7 @@ Each sensor generates JSON events:
   "avg_speed": 34
 }
 ```
-## Data Format
 
-Each sensor generates JSON events:
-```bash
-{
-  "sensor_id": "J2",
-  "timestamp": "2026-02-12 09:35:44",
-  "vehicle_count": 43,
-  "avg_speed": 34
-}
-```
 ## Real-Time Processing (Spark)
 ### Window-Based Aggregation
 - 5-minute tumbling windows
