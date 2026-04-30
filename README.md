@@ -72,7 +72,7 @@ Airflow schedules a nightly DAG that:
 - Reads Parquet data
 - Extracts hourly traffic volume
 - Identifies Peak Traffic Hour
-- Generates daily_traffic_report.csv
+- Generate peak_traffic_report.csv and traffic_volume_vs_time.csv
 ## How to Run
 1️⃣ Start Kafka
 ```bash
