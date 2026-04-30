@@ -44,8 +44,7 @@ Congestion rule:
 avg_speed < 10 km/h
 ```
 If triggered:
-- Alert printed to console
-- Can publish to Critical-Traffic topic
+- Alert published to Critical-Traffic topic
 
 This ensures immediate response to severe traffic conditions.
 ## Event Time Handling
