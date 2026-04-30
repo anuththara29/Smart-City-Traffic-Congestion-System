@@ -24,10 +24,17 @@ json_df = df.selectExpr("CAST(value AS STRING)") \
     .withColumn("event_time", to_timestamp("timestamp"))
 
 # Alerts
-alerts = json_df.filter(col("avg_speed") < 10)
+alerts = json_df.filter(col("avg_speed") < 10) \
+    .selectExpr(
+        "CAST(sensor_id AS STRING) as key",
+        "to_json(struct(*)) AS value"
+    )
 
 alert_query = alerts.writeStream \
-    .format("console") \
+    .format("kafka") \
+    .option("kafka.bootstrap.servers", "localhost:9092") \
+    .option("topic", "critical-traffic") \
+    .option("checkpointLocation", "data/checkpoint_alerts") \
     .outputMode("append") \
     .start()
 
@@ -42,6 +49,13 @@ windowed = json_df \
         avg("avg_speed").alias("avg_speed"),
         sum("vehicle_count").alias("total_vehicles")
     )
+
+# console output
+console_query = windowed.writeStream \
+    .outputMode("append") \
+    .format("console") \
+    .option("truncate", False) \
+    .start()
 
 # Storage
 storage_query = windowed.writeStream \

@@ -1,0 +1,6 @@
+v1
+{"path":"file:///D:/Uni/sem%208/Big%20data/abda-mini-project/data/traffic_parquet/part-00000-5e07e9f0-b027-443a-85e1-95af8647afc1-c000.snappy.parquet","size":809,"isDir":false,"modificationTime":1777555596285,"blockReplication":1,"blockSize":33554432,"action":"add"}
+{"path":"file:///D:/Uni/sem%208/Big%20data/abda-mini-project/data/traffic_parquet/part-00037-43d8fd2a-7d70-4faa-a3e7-92f8e19d0178-c000.snappy.parquet","size":1726,"isDir":false,"modificationTime":1777555601310,"blockReplication":1,"blockSize":33554432,"action":"add"}
+{"path":"file:///D:/Uni/sem%208/Big%20data/abda-mini-project/data/traffic_parquet/part-00040-22587eb9-ad89-4889-89e8-ff56db591468-c000.snappy.parquet","size":1727,"isDir":false,"modificationTime":1777555601971,"blockReplication":1,"blockSize":33554432,"action":"add"}
+{"path":"file:///D:/Uni/sem%208/Big%20data/abda-mini-project/data/traffic_parquet/part-00062-582833f4-8bb2-4686-8fde-4fe2b29ed8ea-c000.snappy.parquet","size":1727,"isDir":false,"modificationTime":1777555605434,"blockReplication":1,"blockSize":33554432,"action":"add"}
+{"path":"file:///D:/Uni/sem%208/Big%20data/abda-mini-project/data/traffic_parquet/part-00148-48dcbaba-5464-4ee3-a9d3-6a59b549f0ee-c000.snappy.parquet","size":1727,"isDir":false,"modificationTime":1777555619336,"blockReplication":1,"blockSize":33554432,"action":"add"}

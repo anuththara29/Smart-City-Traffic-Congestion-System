@@ -11,14 +11,11 @@ def generate_report():
 
     os.makedirs(out, exist_ok=True)
 
-    # Load parquet produced by Spark
     df = pd.read_parquet(path)
 
     if df.empty:
         print("No data found.")
         return
-
-    print("Loaded columns:", df.columns)
 
     # Extract window start
     df["window_start"] = df["window"].apply(
@@ -28,37 +25,29 @@ def generate_report():
     df["window_start"] = pd.to_datetime(df["window_start"], unit="ns")
     df["hour"] = df["window_start"].dt.hour
 
-    # Traffic per sensor per hour
-    sensor_hourly = (
+    # Traffic Volume vs Time 
+    traffic_volume = (
         df.groupby(["sensor_id", "hour"])["total_vehicles"]
         .sum()
         .reset_index()
     )
 
-    sensor_hourly.to_csv(
-        f"{out}/traffic_per_sensor_per_hour.csv",
-        index=False
-    )
-
-    # Overall traffic per hour 
-    hourly_total = (
-        df.groupby("hour")["total_vehicles"]
-        .sum()
-        .reset_index()
-    )
-
-    hourly_total.to_csv(
+    traffic_volume.to_csv(
         f"{out}/traffic_volume_vs_time.csv",
         index=False
     )
 
-    # Peak hour per sensor
-    peak = sensor_hourly.loc[
-        sensor_hourly.groupby("sensor_id")["total_vehicles"].idxmax()
+    # Peak Hour per Sensor
+    peak = traffic_volume.loc[
+        traffic_volume.groupby("sensor_id")["total_vehicles"].idxmax()
     ]
 
+    # Decision Logic 
+    threshold = 1800
+    peak["needs_intervention"] = peak["total_vehicles"] > threshold
+
     peak.to_csv(
-        f"{out}/peak_hour_per_sensor.csv",
+        f"{out}/peak_traffic_report.csv",
         index=False
     )
 
@@ -70,7 +59,7 @@ with DAG(
     start_date=datetime(2025, 1, 1),
     schedule_interval="@daily",
     catchup=False,
-    tags=["traffic", "batch", "spark"],
+    tags=["traffic", "batch"],
 ) as dag:
 
     generate_daily_report = PythonOperator(

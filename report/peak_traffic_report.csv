@@ -1,0 +1,5 @@
+sensor_id,hour,total_vehicles,needs_intervention
+J1,6,3627,True
+J2,6,3918,True
+J3,6,4132,True
+J4,6,4133,True
